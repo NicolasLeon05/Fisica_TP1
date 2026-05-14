@@ -17,6 +17,7 @@ public class Ball : MonoBehaviour
 
     private Vector2 velocity;
     private Vector2 acceleration;
+    private const float GRAVITY = 9.8f;
 
     private Vector2 debugDirection = Vector2.right;
 
@@ -56,22 +57,22 @@ public class Ball : MonoBehaviour
             return;
         }
 
-        Vector2 frictionAcceleration =-velocity.normalized * frictionCoefficient;
+        Vector2 frictionAcceleration = -velocity.normalized * frictionCoefficient * GRAVITY;
         acceleration += frictionAcceleration;
     }
 
     public void PhysicsStep(float deltaTime)
     {
-        velocity += acceleration * deltaTime;
+        transform.position += (Vector3)(velocity * deltaTime + 0.5f * acceleration * deltaTime * deltaTime);
 
-        transform.position += (Vector3)(velocity * deltaTime);
+        velocity += acceleration * deltaTime;
 
         acceleration = Vector2.zero;
     }
 
-    public void AddAcceleration(Vector2 accleration)
+    public void AddImpulse(Vector2 impulse)
     {
-        velocity += accleration / mass;
+        velocity += impulse / mass;
     }
 
     public void SetVelocity(Vector2 newVelocity)

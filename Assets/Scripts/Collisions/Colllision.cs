@@ -1,5 +1,6 @@
 using UnityEngine;
 
+
 public static class Collision
 {
     public struct CollisionInfo
@@ -7,6 +8,11 @@ public static class Collision
         public bool collision;
         public Vector2 normal;
         public float penetration;
+    }
+
+    public static float DotProduct(Vector2 a, Vector2 b)
+    {
+        return a.x * b.x + a.y * b.y;
     }
 
     public static CollisionInfo CircleVsOBB(Circle circle, OBB box)

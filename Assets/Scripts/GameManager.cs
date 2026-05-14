@@ -18,8 +18,11 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
             HandleInput();
+    }
 
-        float dt = Time.deltaTime;
+    private void FixedUpdate()
+    {
+        float dt = Time.fixedDeltaTime;
 
         foreach (Ball ball in balls)
         {
@@ -49,9 +52,9 @@ public class GameManager : MonoBehaviour
                 selectedBall.SetDebugDirection(shootDirection);
             }
 
-            Vector2 acceleration = shootDirection * shotForce;
+            Vector2 impulse = shootDirection * shotForce;
             selectedBall.SetVelocity(Vector2.zero);
-            selectedBall.AddAcceleration(acceleration);
+            selectedBall.AddImpulse(impulse);
         }
     }
 
@@ -76,7 +79,7 @@ public class GameManager : MonoBehaviour
         ball.Move(info.normal * info.penetration);
 
         Vector2 velocity = ball.Velocity;
-        float velocityAlongNormal = Vector2.Dot(velocity, info.normal);
+        float velocityAlongNormal = Collision.DotProduct(velocity, info.normal);
 
         if (velocityAlongNormal > 0)
             return;
@@ -115,7 +118,7 @@ public class GameManager : MonoBehaviour
 
         Vector2 relativeVelocity = b.Velocity - a.Velocity;
 
-        float velocityAlongNormal = Vector2.Dot(relativeVelocity, info.normal);
+        float velocityAlongNormal = Collision.DotProduct(relativeVelocity, info.normal);
 
         if (velocityAlongNormal > 0)
             return;

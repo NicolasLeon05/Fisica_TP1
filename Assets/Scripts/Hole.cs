@@ -14,6 +14,12 @@ public class Hole : MonoBehaviour
     }
     private void OnValidate()
     {
-        radius = transform.localScale.x / 2f;
+        radius = transform.lossyScale.x / 2f;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, radius);
     }
 }
