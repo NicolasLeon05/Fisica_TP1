@@ -77,14 +77,17 @@ public class GameManager : MonoBehaviour
 
     private void ResolveWallCollision(Ball ball, Collision.CollisionInfo info)
     {
+        //Separa la bola de la pared
         ball.Move(info.normal * info.penetration);
 
+        //Calcula la velocidad en la normal de la colision
         Vector2 velocity = ball.Velocity;
         float velocityAlongNormal = Collision.DotProduct(velocity, info.normal);
 
         if (velocityAlongNormal > 0)
             return;
 
+        //Refleja la velocidad modificada por la restitucion respecto a la normal
         Vector2 reflected = velocity - (1 + ball.Restitution) * velocityAlongNormal * info.normal;
         ball.SetVelocity(reflected);
     }
