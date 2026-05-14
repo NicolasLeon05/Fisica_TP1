@@ -10,10 +10,10 @@ public class Hole : MonoBehaviour
 
     private void Start()
     {
-        transform.position = initialPosition;
+        transform.localPosition = initialPosition;
     }
     private void OnValidate()
     {
-        radius = transform.lossyScale.x / 2f;
+        radius = transform.localScale.x / 2f;
     }
 }

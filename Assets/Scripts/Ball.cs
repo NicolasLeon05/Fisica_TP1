@@ -38,7 +38,7 @@ public class Ball : MonoBehaviour
 
     private void Start()
     {
-        transform.position = initialPosition;
+        transform.localPosition = initialPosition;
 
         velocity = initialVelocity;
 
