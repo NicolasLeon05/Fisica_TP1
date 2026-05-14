@@ -52,8 +52,9 @@ public class GameManager : MonoBehaviour
                 selectedBall.SetDebugDirection(shootDirection);
             }
 
-            Vector2 impulse = shootDirection * shotForce;
             selectedBall.SetVelocity(Vector2.zero);
+
+            Vector2 impulse = shootDirection * shotForce;
             selectedBall.AddImpulse(impulse);
         }
     }
@@ -111,24 +112,29 @@ public class GameManager : MonoBehaviour
     {
         float totalMass = a.Mass + b.Mass;
 
+        //Separacion de las bolas respecto a su masa
         Vector2 separation = info.normal * info.penetration;
-
         a.Move(-separation * (b.Mass / totalMass));
         b.Move(separation * (a.Mass / totalMass));
 
-        Vector2 relativeVelocity = b.Velocity - a.Velocity;
 
+        //Como se mueve B respecto de A
+        Vector2 relativeVelocity = b.Velocity - a.Velocity;
+        //Que tan rapido se mueven en la direccion de la colision
         float velocityAlongNormal = Collision.DotProduct(relativeVelocity, info.normal);
 
-        if (velocityAlongNormal > 0)
+        if (velocityAlongNormal > 0) //Se alejan
             return;
 
+        //Cuanta momento lineal se conserva
         float restitution = Mathf.Min(a.Restitution, b.Restitution);
 
-        float impulseMagnitude = -(1 + restitution) * velocityAlongNormal;
-        impulseMagnitude /= (1f / a.Mass) + (1f / b.Mass);
-        Vector2 impulse = impulseMagnitude * info.normal;
 
+        float impulseMagnitude = -(1 + restitution) * velocityAlongNormal;
+        impulseMagnitude /= (1f / a.Mass) + (1f / b.Mass); //Cuanto van a cambiar los momentos
+        Vector2 impulse = impulseMagnitude * info.normal; //Se divide en x e y en base a la normal
+
+        //Aplica el impulso
         Vector2 newVelocityA = a.Velocity - impulse / a.Mass;
         Vector2 newVelocityB = b.Velocity + impulse / b.Mass;
 
