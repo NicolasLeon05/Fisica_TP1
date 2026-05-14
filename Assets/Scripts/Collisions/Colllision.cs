@@ -80,7 +80,6 @@ public static class Collision
             info.normal = Vector2.right;
 
         info.penetration = radiusSum - distance;
-
         return info;
     }
 }

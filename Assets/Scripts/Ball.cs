@@ -39,9 +39,7 @@ public class Ball : MonoBehaviour
     private void Start()
     {
         transform.localPosition = initialPosition;
-
         velocity = initialVelocity;
-
         radius = transform.lossyScale.x / 2f;
     }
 
@@ -58,10 +56,7 @@ public class Ball : MonoBehaviour
             return;
         }
 
-        Vector2 frictionAcceleration =
-            -velocity.normalized *
-            frictionCoefficient;
-
+        Vector2 frictionAcceleration =-velocity.normalized * frictionCoefficient;
         acceleration += frictionAcceleration;
     }
 
@@ -69,8 +64,7 @@ public class Ball : MonoBehaviour
     {
         velocity += acceleration * deltaTime;
 
-        transform.position +=
-            (Vector3)(velocity * deltaTime);
+        transform.position += (Vector3)(velocity * deltaTime);
 
         acceleration = Vector2.zero;
     }

@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private Table table;
     [SerializeField] private List<Ball> balls;
+    [SerializeField] private List<Hole> holes;
 
     [Header("Shot")]
     [SerializeField] private Ball selectedBall;
@@ -28,6 +29,7 @@ public class GameManager : MonoBehaviour
 
         ResolveWallCollisions();
         ResolveBallCollisions();
+        ResolveHoles();
     }
 
     private void HandleInput()
@@ -129,5 +131,32 @@ public class GameManager : MonoBehaviour
 
         a.SetVelocity(newVelocityA);
         b.SetVelocity(newVelocityB);
+    }
+
+    private void ResolveHoles()
+    {
+        List<Ball> ballsToRemove = new List<Ball>();
+
+        foreach (Ball ball in balls)
+        {
+            foreach (Hole hole in holes)
+            {
+                float distance = Vector2.Distance(ball.Position, hole.Position);
+                if (distance <= hole.Radius)
+                {
+                    ballsToRemove.Add(ball);
+                    break;
+                }
+            }
+        }
+
+        foreach (Ball ball in ballsToRemove)
+        {
+            balls.Remove(ball);
+            Destroy(ball.gameObject);
+        }
+
+        if (balls.Count == 0)
+            Debug.Log("Simulation Finished");
     }
 }

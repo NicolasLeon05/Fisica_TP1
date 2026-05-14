@@ -30,18 +30,4 @@ public class OBB
             return new Vector2(-Mathf.Sin(rad), Mathf.Cos(rad));
         }
     }
-
-    public Vector2[] GetCorners()
-    {
-        Vector2 right = Right * halfSize.x;
-        Vector2 up = Up * halfSize.y;
-
-        return new Vector2[]
-        {
-            center + right + up,
-            center + right - up,
-            center - right - up,
-            center - right + up
-        };
-    }
 }
