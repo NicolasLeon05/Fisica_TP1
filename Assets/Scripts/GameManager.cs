@@ -132,14 +132,42 @@ public class GameManager : MonoBehaviour
         //Cuanta momento lineal se conserva
         float restitution = Mathf.Min(a.Restitution, b.Restitution);
 
+        float totalCineticEnergy = 0.5f * a.Mass * (a.Velocity.magnitude * a.Velocity.magnitude) +
+                                   0.5f * b.Mass * (b.Velocity.magnitude * b.Velocity.magnitude);
 
-        float impulseMagnitude = -(1 + restitution) * velocityAlongNormal;
-        impulseMagnitude /= (1f / a.Mass) + (1f / b.Mass); //Cuanto van a cambiar los momentos
-        Vector2 impulse = impulseMagnitude * info.normal; //Se divide en x e y en base a la normal
+        totalCineticEnergy *= restitution;
+
+        float aMassPercentage = a.Mass / totalMass;
+
+        float newAEnergy = totalCineticEnergy * aMassPercentage;
+        float newBEnergy = totalCineticEnergy * (1 - aMassPercentage);
+
+        float oldAMomentum = a.Mass * a.Velocity.magnitude;
+        float newAMomentum = Mathf.Sqrt(2 * a.Mass * newAEnergy);
+        float aImpulse = newAMomentum - oldAMomentum;
+
+        float oldBMomentum = b.Mass * b.Velocity.magnitude;
+        float newBMomentum = Mathf.Sqrt(2 * b.Mass * newBEnergy);
+        float bImpulse = newBMomentum - oldBMomentum;
+
+        //float aNewVelocity = Mathf.Sqrt(newAEnergy * /*a.Restitution **/ 2 / a.Mass);
+        //float bNewVelocity = Mathf.Sqrt(newBEnergy * /*b.Restitution **/ 2 / b.Mass);
+
+        //float aImpulse = a.Mass * (aNewVelocity - a.Velocity.magnitude);
+        //float bImpulse = b.Mass * (bNewVelocity - b.Velocity.magnitude);
+
+        Vector2 aDivImpulse = aImpulse / a.Mass * info.normal;
+        Vector2 bDivImpulse = bImpulse / b.Mass * info.normal;
+        //float impulseMagnitude = -(1 + restitution) * velocityAlongNormal;
+        //impulseMagnitude /= (1f / a.Mass) + (1f / b.Mass); //Cuanto van a cambiar los momentos
+        //Vector2 impulse = impulseMagnitude * info.normal; //Se divide en x e y en base a la normal
+
 
         //Aplica el impulso
-        Vector2 newVelocityA = a.Velocity - impulse / a.Mass;
-        Vector2 newVelocityB = b.Velocity + impulse / b.Mass;
+        //Vector2 newVelocityA = a.Velocity - impulse / a.Mass;
+        //Vector2 newVelocityB = b.Velocity + impulse / b.Mass;
+        Vector2 newVelocityA = a.Velocity - aDivImpulse;
+        Vector2 newVelocityB = b.Velocity + bDivImpulse;
 
         a.SetVelocity(newVelocityA);
         b.SetVelocity(newVelocityB);
