@@ -63,7 +63,7 @@ public class Ball : MonoBehaviour
 
     public void PhysicsStep(float deltaTime)
     {
-        transform.position += (Vector3)(velocity * deltaTime + 0.5f * acceleration * deltaTime * deltaTime);
+        transform.position += (Vector3)(velocity * deltaTime + 0.5f * acceleration * (deltaTime * deltaTime));
 
         velocity += acceleration * deltaTime;
 

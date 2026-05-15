@@ -122,11 +122,15 @@ public class GameManager : MonoBehaviour
 
 
         //Como se mueve B respecto de A
-        Vector2 relativeVelocity = b.Velocity - a.Velocity;
+        Vector2 bRelativeVelocity = b.Velocity - a.Velocity;
         //Que tan rapido se mueven en la direccion de la colision
-        float velocityAlongNormal = Collision.DotProduct(relativeVelocity, info.normal);
+        float bVelocityAlongNormal = Collision.DotProduct(bRelativeVelocity, info.normal);
 
-        if (velocityAlongNormal > 0) //Se alejan
+        Vector2 aRelativeVelocity = a.Velocity - b.Velocity;
+        //Que tan rapido se mueven en la direccion de la colision
+        float aVelocityAlongNormal = Collision.DotProduct(aRelativeVelocity, info.normal);
+
+        if (bVelocityAlongNormal > 0) //Se alejan
             return;
 
         //Cuanta momento lineal se conserva
@@ -142,11 +146,11 @@ public class GameManager : MonoBehaviour
         float newAEnergy = totalCineticEnergy * aMassPercentage;
         float newBEnergy = totalCineticEnergy * (1 - aMassPercentage);
 
-        float oldAMomentum = a.Mass * a.Velocity.magnitude;
+        float oldAMomentum = a.Mass * aVelocityAlongNormal;
         float newAMomentum = Mathf.Sqrt(2 * a.Mass * newAEnergy);
         float aImpulse = newAMomentum - oldAMomentum;
 
-        float oldBMomentum = b.Mass * b.Velocity.magnitude;
+        float oldBMomentum = b.Mass * bVelocityAlongNormal;
         float newBMomentum = Mathf.Sqrt(2 * b.Mass * newBEnergy);
         float bImpulse = newBMomentum - oldBMomentum;
 
